@@ -15,7 +15,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Text _ammoCount;
     private Player player;
-    private bool _coroutineRunning = false;
 
     void Start()
     {

@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     [SerializeField] private SpriteRenderer _shieldSprite;
+    private CameraShake _cameraShake;
 
     void Start()
     {
@@ -48,6 +49,12 @@ public class Player : MonoBehaviour
         if (_audioSource == null)
         {
             Debug.LogError("AudioSource for Player is NULL");
+        }
+
+        _cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+        if (_cameraShake == null)
+        {
+            Debug.LogError("CameraShake is NULL");
         }
     }
 
@@ -136,6 +143,7 @@ public class Player : MonoBehaviour
         }
 
         _lives--;
+        _cameraShake.ShakeTheCamera(1f);
         if(_lives > 0)
         {
             _shipDamages[2-_lives].SetActive(true);
