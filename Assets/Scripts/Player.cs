@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _fireRate = 0.15f;
     [SerializeField] private float _canFire = -1;
     [SerializeField] private int _lives = 3;
+    [SerializeField] private int _shieldStrength = 3;
     [SerializeField] private bool _tripleFireActive = false;
     [SerializeField] private int _score;
     [SerializeField] private GameObject[] _shipDamages;
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
+    [SerializeField] private SpriteRenderer shieldSprite;
 
     void Start()
     {
@@ -39,7 +41,12 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("UI Manager is NULL");
         }
+
         audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource for Player is NULL");
+        }
     }
 
 
@@ -109,6 +116,15 @@ public class Player : MonoBehaviour
     {
         if (_isShieldActive)
         {
+            if (_shieldStrength > 0)
+            {
+                //remove one strength from shield
+                _shieldStrength--;
+                //reduce visual strength of shield
+                shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
+                return; 
+            }
+
             _isShieldActive = false;
             _shield.SetActive(false);
             return;
@@ -156,7 +172,9 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
+        _shieldStrength = 3;
         _isShieldActive = true;
+        shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
         _shield.SetActive(true);
     }
 
