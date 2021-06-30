@@ -2501,8 +2501,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c938351b1d3867740a5e4ae501a1e699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shakeDuration: 1
-  _shakeAmount: 0.5
+  _shakeDuration: 0.6
+  _shakeAmount: 0.2
   _decreaseFactor: 1
 --- !u!1001 &6145995306906215954
 PrefabInstance:

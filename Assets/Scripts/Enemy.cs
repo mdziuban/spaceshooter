@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     private Player _player;
     private int _scoreValue;
     private float _canFire = -1;
+    private int _directionToMove;
+    private bool _notDead = true;
 
     
     
@@ -37,13 +39,13 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("AudioSource on enemy is NULL");
         }
+        _directionToMove = Random.Range(-1,2);
 
     }
 
     private void Update() {
-
-        MoveDown();
-        if (Time.time > _canFire)
+        MoveDown(_directionToMove);
+        if (Time.time > _canFire && _notDead)
         {
             _fireRate = Random.Range(3f, 7f);
             _canFire = Time.time + _fireRate;
@@ -57,10 +59,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void MoveDown()
+    private void MoveDown(int moveXDirection)
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        if (transform.position.y < -8f)
+        transform.Translate(new Vector3(moveXDirection,-1,0) * _speed * Time.deltaTime);
+        if (transform.position.y < -8f || transform.position.x > 12f || transform.position.x < -12f)
         {
             ReturnToTop();
         }
@@ -94,6 +96,7 @@ public class Enemy : MonoBehaviour
 
     private void DestroyEnemy()
     {
+        _notDead = false;
         Destroy(GetComponent<Collider2D>());
         animator.SetTrigger("OnEnemyDeath");
         audioSource.PlayOneShot(explosionSound);
