@@ -39,13 +39,13 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (player.GetAmmoCount() == 0 && !_coroutineRunning)
+        if (player.GetAmmoCount() == 0)
         {
-            StartCoroutine(OutOfAmmoFlicker());
+            _outOfAmmoText.gameObject.SetActive(true);
         }
-        else if (player.GetAmmoCount() > 0 && _coroutineRunning)
+        else if (player.GetAmmoCount() > 0)
         {
-            StopCoroutine(OutOfAmmoFlicker());
+            _outOfAmmoText.gameObject.SetActive(false);
         }
     }
 
@@ -87,20 +87,4 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void OutOfAmmo()
-    {
-        StartCoroutine(OutOfAmmoFlicker());
-    }
-
-    IEnumerator OutOfAmmoFlicker()
-    {
-        while (true)
-        {
-            _coroutineRunning = true;
-            _outOfAmmoText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(.3f);
-            _outOfAmmoText.gameObject.SetActive(false);
-            yield return new WaitForSeconds(.3f);
-        }
-    }
 }

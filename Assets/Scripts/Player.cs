@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _laserShot;
     [SerializeField] private int _boostAmount = 2;
     [SerializeField] private int _ammoCount = 15;
+    [SerializeField] private int _ammoBoostAmount = 15;
     private AudioSource _audioSource;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
@@ -194,6 +195,12 @@ public class Player : MonoBehaviour
             _shipDamages[3-_lives].SetActive(false);
             _uiManager.UpdateLives(_lives);
         }
+    }
+
+    public void AmmoAdd()
+    {
+        _ammoCount += _ammoBoostAmount;
+        _uiManager.UpdateAmmo(_ammoCount);
     }
 
 

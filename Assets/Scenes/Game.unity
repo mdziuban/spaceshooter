@@ -409,6 +409,7 @@ MonoBehaviour:
   _laserShot: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _boostAmount: 2
   _ammoCount: 15
+  _ammoBoostAmount: 15
   _shieldSprite: {fileID: 1870154489}
 --- !u!212 &204668463
 SpriteRenderer:
@@ -1923,6 +1924,8 @@ MonoBehaviour:
   _powerUpContainer: {fileID: 553411920}
   minPowerupSpawnTime: 3
   maxPowerupSpawnTime: 7
+  _AmmoRestorePrefab: {fileID: 7988385613074416863, guid: d3fc42305747771459add14df2b824ca,
+    type: 3}
 --- !u!4 &1919760333
 Transform:
   m_ObjectHideFlags: 0
