@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int _score;
     [SerializeField] private GameObject[] _shipDamages;
     [SerializeField] private AudioClip laserShot;
-
+    [SerializeField] private int boostAmount = 2;
     private AudioSource audioSource;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-        ShootLaser();
+            ShootLaser();
         }
     }
 
@@ -73,14 +73,27 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            boostAmount = 2;
+        }
+        else 
+        {
+            boostAmount = 1;
+        }
 
         if (!_isSpeedBoostActive)
         {
-            transform.Translate(direction * speed * Time.deltaTime);
+            transform.Translate(direction * speed * boostAmount * Time.deltaTime);
         }
         else
         {
             transform.Translate(direction * (speed * _speedMuliplier) * Time.deltaTime);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
         }
         
         //clamps the player to prevent them from going below 3.8 and above 0
