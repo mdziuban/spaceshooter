@@ -411,6 +411,7 @@ MonoBehaviour:
   _ammoCount: 15
   _ammoBoostAmount: 15
   _boostBar: {fileID: 1043845058}
+  _maxBoostTime: 5
   _shieldSprite: {fileID: 1870154489}
 --- !u!212 &204668463
 SpriteRenderer:
@@ -1133,7 +1134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.0071134567, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.5877962, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1288,7 +1289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9552784be57258f4994ffaf7260384dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 0}
+  slider: {fileID: 1043845059}
 --- !u!114 &1043845059
 MonoBehaviour:
   m_ObjectHideFlags: 0

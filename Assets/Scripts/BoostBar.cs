@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class BoostBar : MonoBehaviour
 {
-    private Slider slider;
+    [SerializeField] private Slider slider;
 
     private void Start() 
     {
-        slider = GetComponent<Slider>();
+        //slider = GetComponent<Slider>();
     }
     
     public void SetMaxBoost(int boost)
