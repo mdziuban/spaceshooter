@@ -18,14 +18,15 @@ public class Player : MonoBehaviour
     [SerializeField] private bool _tripleFireActive = false;
     [SerializeField] private int _score;
     [SerializeField] private GameObject[] _shipDamages;
-    [SerializeField] private AudioClip laserShot;
-    [SerializeField] private int boostAmount = 2;
-    private AudioSource audioSource;
+    [SerializeField] private AudioClip _laserShot;
+    [SerializeField] private int _boostAmount = 2;
+    [SerializeField] private int _ammoCount = 15;
+    private AudioSource _audioSource;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
-    [SerializeField] private SpriteRenderer shieldSprite;
+    [SerializeField] private SpriteRenderer _shieldSprite;
 
     void Start()
     {
@@ -42,8 +43,8 @@ public class Player : MonoBehaviour
             Debug.LogError("UI Manager is NULL");
         }
 
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
         {
             Debug.LogError("AudioSource for Player is NULL");
         }
@@ -53,7 +54,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _ammoCount > 0)
         {
             ShootLaser();
         }
@@ -65,13 +66,17 @@ public class Player : MonoBehaviour
         if (_tripleFireActive)
         {
             Instantiate(_tripleLaserPrefab, transform.position, Quaternion.identity);
+            _ammoCount--;
+            _uiManager.UpdateAmmo(_ammoCount);
         }
         else
         {
-            Instantiate(_laserPrefab, transform.position + _laserFireOffset, Quaternion.identity);    
+            Instantiate(_laserPrefab, transform.position + _laserFireOffset, Quaternion.identity); 
+            _ammoCount--; 
+            _uiManager.UpdateAmmo(_ammoCount);  
         }
 
-        audioSource.PlayOneShot(laserShot);
+        _audioSource.PlayOneShot(_laserShot);
         
     }
 
@@ -82,16 +87,16 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            boostAmount = 2;
+            _boostAmount = 2;
         }
         else 
         {
-            boostAmount = 1;
+            _boostAmount = 1;
         }
 
         if (!_isSpeedBoostActive)
         {
-            transform.Translate(direction * speed * boostAmount * Time.deltaTime);
+            transform.Translate(direction * speed * _boostAmount * Time.deltaTime);
         }
         else
         {
@@ -118,10 +123,8 @@ public class Player : MonoBehaviour
         {
             if (_shieldStrength > 0)
             {
-                //remove one strength from shield
                 _shieldStrength--;
-                //reduce visual strength of shield
-                shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
+                _shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
                 return; 
             }
 
@@ -174,15 +177,20 @@ public class Player : MonoBehaviour
     {
         _shieldStrength = 3;
         _isShieldActive = true;
-        shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
+        _shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
         _shield.SetActive(true);
     }
 
-    //method to add 10 to the score
+
     public void UpdateScore(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
     }
-    //communicate with the UI to update the score
+
+    public int GetAmmoCount()
+    {
+        return _ammoCount;
+    }
+
 }
