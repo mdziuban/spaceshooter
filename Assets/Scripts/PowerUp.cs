@@ -10,6 +10,8 @@ public class PowerUp : MonoBehaviour
     //0 = triple shot
     //1 = speed 
     //2 = shield
+    //3 = health
+    //4 = ammo
     private int bottomOfScreen = -8;
 
     private void Update() 
@@ -41,6 +43,12 @@ public class PowerUp : MonoBehaviour
                         break;
                     case 2:
                         player.ShieldActive();
+                        break;
+                    case 3:
+                        player.HealthAdd();
+                        break;
+                    case 4:
+                        //ammo powerup
                         break;
                     default:
                         Debug.LogError("PowerupID is invalid");

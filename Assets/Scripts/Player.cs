@@ -149,6 +149,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void ShipHealth()
+    {
+
+    }
+
     public void TripleFireSetActive()
     {
         _tripleFireActive = true;
@@ -179,6 +184,16 @@ public class Player : MonoBehaviour
         _isShieldActive = true;
         _shieldSprite.color = new Color(1,1,1,_shieldStrength*.33f);
         _shield.SetActive(true);
+    }
+
+    public void HealthAdd()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            _shipDamages[3-_lives].SetActive(false);
+            _uiManager.UpdateLives(_lives);
+        }
     }
 
 

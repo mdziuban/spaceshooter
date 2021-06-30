@@ -1917,6 +1917,7 @@ MonoBehaviour:
   - {fileID: 32842608118915094, guid: 9085db196840d10439da65ebde2709cd, type: 3}
   - {fileID: 9095823602258867163, guid: 15c3004014971744cab8cb7d1b6fbc54, type: 3}
   - {fileID: 1360812565217435250, guid: 17d78db2cb31efa43a3aa68f81d4533a, type: 3}
+  - {fileID: 3024181515511285272, guid: 4f34455f6b9de8c4db7f1ec758412efc, type: 3}
   waitTime: 5
   _enemyContainer: {fileID: 34374670}
   _powerUpContainer: {fileID: 553411920}
