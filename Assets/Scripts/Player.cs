@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
     [SerializeField] private int _boostAmount = 2;
     [SerializeField] private int _ammoCount = 15;
     [SerializeField] private int _ammoBoostAmount = 15;
+    [SerializeField] private BoostBar _boostBar;
+    [SerializeField] private int _maxBoostTime = 5;
+    private float _currentBoostTime;
     private AudioSource _audioSource;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
@@ -56,6 +59,8 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("CameraShake is NULL");
         }
+        _currentBoostTime = _maxBoostTime;
+        _boostBar.SetMaxBoost(_maxBoostTime);
     }
 
 
@@ -93,13 +98,18 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && _currentBoostTime > 0)
         {
             _boostAmount = 2;
+            _currentBoostTime -= Time.deltaTime;
+            _boostBar.SetBoostBar(_currentBoostTime);
+            
         }
         else 
         {
             _boostAmount = 1;
+            _currentBoostTime += (Time.deltaTime * .5f);
+            _boostBar.SetBoostBar(_currentBoostTime);
         }
 
         if (!_isSpeedBoostActive)
@@ -156,11 +166,6 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
             
         }
-    }
-
-    private void ShipHealth()
-    {
-
     }
 
     public void TripleFireSetActive()
