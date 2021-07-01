@@ -25,9 +25,7 @@ public class SpawnManager : MonoBehaviour
         if (!_spawningStarted)
         {
             _spawningStarted = true;
-            //StartCoroutine(SpawnEnemyRoutine());
             StartCoroutine(SpawnPowerUpRoutine());
-            StartCoroutine(SpawnAmmoRoutine());
             StartCoroutine(WaveSpawnerRoutine());
         }
 
@@ -52,43 +50,43 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnEnemyRoutine()
-    {
-        yield return new WaitForSeconds(3f);
-        while(!_stopSpawning)
-        {
-            Vector3 positionToSpawn = new Vector3(Random.Range(-9,9),8,0);
-            GameObject newEnemy = Instantiate(_enemyPrefab,positionToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(waitTime);
-        }
-
-    }
 
     IEnumerator SpawnPowerUpRoutine()
     {
+    //0 = health
+    //1 = speed 
+    //2 = shield
+    //3 = triple shot 
+    //4 = ammo
+    //5 = slowDown - negative effect
         yield return new WaitForSeconds(3f);
         while(!_stopSpawning)
         {
+            int randomPowerUp;
             Vector3 positionToSpawn = new Vector3(Random.Range(-9,9),8,0);
-            int randomPowerUp = Random.Range(0,_PowerUpPrefabs.Length);
+            int roll = Random.Range(0,100);
+            if (roll < 10) //this is the health powerup
+            {
+                randomPowerUp = 0;
+            }
+            else if (roll > 9 && roll < 30)
+            {
+                randomPowerUp = Random.Range(1,_PowerUpPrefabs.Length-2); //speed, shield, triple shot
+            }
+            else if (roll > 29 && roll < 90)
+            {
+                randomPowerUp = 4; //ammo 
+            }
+            else 
+            {
+                randomPowerUp = 5; //slow down
+            }
             GameObject newPowerUp = Instantiate(_PowerUpPrefabs[randomPowerUp],positionToSpawn, Quaternion.identity);
             newPowerUp.transform.parent = _powerUpContainer.transform;
             yield return new WaitForSeconds(Random.Range(minPowerupSpawnTime,maxPowerupSpawnTime));
         }
     }
 
-    IEnumerator SpawnAmmoRoutine()
-    {
-        yield return new WaitForSeconds(3f);
-        while(!_stopSpawning)
-        {
-            Vector3 positionToSpawn = new Vector3(Random.Range(-9,9),8,0);
-            GameObject newPowerUp = Instantiate(_AmmoRestorePrefab,positionToSpawn, Quaternion.identity);
-            newPowerUp.transform.parent = _powerUpContainer.transform;
-            yield return new WaitForSeconds(Random.Range(minPowerupSpawnTime,maxPowerupSpawnTime));
-        }
-    }
 
     public void OnPlayerDeath()
     {
