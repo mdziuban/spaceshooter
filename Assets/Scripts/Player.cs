@@ -21,11 +21,12 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _laserShot;
     [SerializeField] private int _boostAmount = 2;
     [SerializeField] private int _ammoCount = 15;
-    [SerializeField] private int _ammoBoostAmount = 15;
-    [SerializeField] private BoostBar _boostBar;
+    [SerializeField] private int _ammoPowerUpAmount = 15;
+    [SerializeField] private FillBar _boostFillBar;
+    [SerializeField] private FillBar _ammoFillBar;
     [SerializeField] private int _maxBoostTime = 5;
     private float _currentBoostTime;
-    private AudioSource _audioSource;
+    [SerializeField] private AudioSource _audioSource;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
     private SpawnManager _spawnManager;
@@ -36,7 +37,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn manager is null!");
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
             Debug.LogError("UI Manager is NULL");
         }
 
-        _audioSource = GetComponent<AudioSource>();
+        //_audioSource = GetComponent<AudioSource>();
         if (_audioSource == null)
         {
             Debug.LogError("AudioSource for Player is NULL");
@@ -60,7 +61,8 @@ public class Player : MonoBehaviour
             Debug.LogError("CameraShake is NULL");
         }
         _currentBoostTime = _maxBoostTime;
-        _boostBar.SetMaxBoost(_maxBoostTime);
+        _boostFillBar.SetMaxFill(_maxBoostTime);
+        _ammoFillBar.SetMaxFill(_ammoCount);
     }
 
 
@@ -80,13 +82,13 @@ public class Player : MonoBehaviour
         {
             Instantiate(_tripleLaserPrefab, transform.position, Quaternion.identity);
             _ammoCount--;
-            _uiManager.UpdateAmmo(_ammoCount);
+            _ammoFillBar.SetFillBar(_ammoCount);
         }
         else
         {
             Instantiate(_laserPrefab, transform.position + _laserFireOffset, Quaternion.identity); 
             _ammoCount--; 
-            _uiManager.UpdateAmmo(_ammoCount);  
+            _ammoFillBar.SetFillBar(_ammoCount);  
         }
 
         _audioSource.PlayOneShot(_laserShot);
@@ -102,14 +104,14 @@ public class Player : MonoBehaviour
         {
             _boostAmount = 2;
             _currentBoostTime -= Time.deltaTime;
-            _boostBar.SetBoostBar(_currentBoostTime);
+            _boostFillBar.SetFillBar(_currentBoostTime);
             
         }
         else 
         {
             _boostAmount = 1;
             _currentBoostTime += (Time.deltaTime * .5f);
-            _boostBar.SetBoostBar(_currentBoostTime);
+            _boostFillBar.SetFillBar(_currentBoostTime);
         }
 
         if (!_isSpeedBoostActive)
@@ -212,8 +214,8 @@ public class Player : MonoBehaviour
 
     public void AmmoAdd()
     {
-        _ammoCount += _ammoBoostAmount;
-        _uiManager.UpdateAmmo(_ammoCount);
+        _ammoCount = _ammoPowerUpAmount;
+        _ammoFillBar.SetFillBar(_ammoCount);
     }
 
 

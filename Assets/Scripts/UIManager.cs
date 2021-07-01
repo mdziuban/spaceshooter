@@ -14,7 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _outOfAmmoText;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Text _ammoCount;
-    private Player player;
+
+     private Player player;
 
     void Start()
     {
@@ -50,7 +51,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmo(int ammo)
     {
-        _ammoCount.text = "Ammo: " + ammo.ToString();
+        //_ammoFillBar.SetFillBar(ammo);
     }
 
     public void UpdateScore(int playerScore)
