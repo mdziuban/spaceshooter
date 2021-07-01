@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _fireRate = 3.0f;
     [SerializeField] private AudioClip explosionSound;
     [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _shield;
+    private int _shieldSelectionRandom;
     private AudioSource audioSource;
     private Animator animator;
     private Player _player;
@@ -22,6 +24,8 @@ public class Enemy : MonoBehaviour
     
     private void Start() 
     {
+        _shieldSelectionRandom = Random.Range(0,3);
+        ShieldActive(_shieldSelectionRandom);
         _player = GameObject.Find("Player").GetComponent<Player>();
         if (_player == null)
         {
@@ -42,6 +46,7 @@ public class Enemy : MonoBehaviour
         _directionToMove = Random.Range(-1,2);
 
     }
+
 
     private void Update() {
         MoveDown(_directionToMove);
@@ -76,12 +81,18 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
+
         if (other.CompareTag("Player"))
         {
             Player player = other.transform.GetComponent<Player>();
             if (player != null)
             {
                 player.Damage();
+            }
+            if (_shield.activeSelf == true)
+            {
+            _shield.SetActive(false);
+            return;
             }
             DestroyEnemy();
         }
@@ -90,7 +101,21 @@ public class Enemy : MonoBehaviour
         {
             Destroy(other.gameObject);
             _player.UpdateScore(_scoreValue);
+            if (_shield.activeSelf == true)
+            {
+                _shield.SetActive(false);
+                return;
+            }
             DestroyEnemy();
+        }
+    }
+
+    private void CheckShieldActive()
+    {
+        if (_shield.activeSelf == true)
+        {
+            _shield.SetActive(false);
+            return;
         }
     }
 
@@ -102,5 +127,15 @@ public class Enemy : MonoBehaviour
         audioSource.PlayOneShot(explosionSound);
         _speed = 0;
         Destroy(this.gameObject, 2.5f);
+    }
+
+    private void ShieldActive(int shieldRandom)
+    {
+        if (shieldRandom == 0)
+        {
+            _shield.SetActive(true);
+            Debug.Log("SHIELDS ACTIVE!!!");
+        }
+        
     }
 }
