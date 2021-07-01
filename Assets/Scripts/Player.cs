@@ -25,6 +25,10 @@ public class Player : MonoBehaviour
     [SerializeField] private FillBar _boostFillBar;
     [SerializeField] private FillBar _ammoFillBar;
     [SerializeField] private int _maxBoostTime = 5;
+    [SerializeField] private float _slowDownPowerUpActive = .5f;
+    [SerializeField] private float _powerUpCooldown = 5f;
+    private float _slowDownPowerUpNormal = 1f;
+    private float _slowDownPowerUp;
     private float _currentBoostTime;
     [SerializeField] private AudioSource _audioSource;
     private bool _isSpeedBoostActive = false;
@@ -63,6 +67,7 @@ public class Player : MonoBehaviour
         _currentBoostTime = _maxBoostTime;
         _boostFillBar.SetMaxFill(_maxBoostTime);
         _ammoFillBar.SetMaxFill(_ammoCount);
+        _slowDownPowerUp = _slowDownPowerUpNormal;
     }
 
 
@@ -116,11 +121,11 @@ public class Player : MonoBehaviour
 
         if (!_isSpeedBoostActive)
         {
-            transform.Translate(direction * speed * _boostAmount * Time.deltaTime);
+            transform.Translate(direction * speed * _boostAmount * _slowDownPowerUp * Time.deltaTime);
         }
         else
         {
-            transform.Translate(direction * (speed * _speedMuliplier) * Time.deltaTime);
+            transform.Translate(direction * (speed * _speedMuliplier) * _slowDownPowerUp * Time.deltaTime);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -178,7 +183,7 @@ public class Player : MonoBehaviour
 
     IEnumerator TripleShotPowerDownRoutine()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(_powerUpCooldown);
         _tripleFireActive = false;
     }
 
@@ -190,8 +195,20 @@ public class Player : MonoBehaviour
 
     IEnumerator SpeedBoostPowerDownRoutine()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(_powerUpCooldown);
         _isSpeedBoostActive = false;
+    }
+
+    public void SlowDownActive()
+    {
+        _slowDownPowerUp = _slowDownPowerUpActive;
+    }
+
+    IEnumerator SlowDownPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(_powerUpCooldown);
+        _slowDownPowerUp = _slowDownPowerUpNormal;
+
     }
 
     public void ShieldActive()

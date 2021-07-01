@@ -12,6 +12,7 @@ public class PowerUp : MonoBehaviour
     //2 = shield
     //3 = health
     //4 = ammo
+    //5 = slowDown - negative effect
     private int bottomOfScreen = -8;
 
     private void Update() 
@@ -49,6 +50,9 @@ public class PowerUp : MonoBehaviour
                         break;
                     case 4:
                         player.AmmoAdd();
+                        break;
+                    case 5:
+                        player.SlowDownActive();
                         break;
                     default:
                         Debug.LogError("PowerupID is invalid");
