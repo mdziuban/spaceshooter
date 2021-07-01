@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _outOfAmmoText;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Text _ammoCount;
+    [SerializeField] private Text _newWaveIncoming;
 
      private Player player;
 
@@ -49,10 +50,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateAmmo(int ammo)
+    public void NewWaveIncomingText(bool toggle)
     {
-        //_ammoFillBar.SetFillBar(ammo);
+        _newWaveIncoming.gameObject.SetActive(toggle);
     }
+
+
 
     public void UpdateScore(int playerScore)
     {

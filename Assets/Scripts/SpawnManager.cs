@@ -12,8 +12,12 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] float minPowerupSpawnTime = 3f;
     [SerializeField] float maxPowerupSpawnTime = 7f;
     [SerializeField] GameObject _AmmoRestorePrefab;
+    [SerializeField] int _numberOfWaves = 10;
+    [SerializeField] float _timeBetweenWaves = 10f;
+    [SerializeField] private UIManager _uiManager;
     private bool _stopSpawning = false;
     private bool _spawningStarted = false;
+
 
 
     public void StartSpawning()
@@ -21,11 +25,31 @@ public class SpawnManager : MonoBehaviour
         if (!_spawningStarted)
         {
             _spawningStarted = true;
-            StartCoroutine(SpawnEnemyRoutine());
+            //StartCoroutine(SpawnEnemyRoutine());
             StartCoroutine(SpawnPowerUpRoutine());
             StartCoroutine(SpawnAmmoRoutine());
+            StartCoroutine(WaveSpawnerRoutine());
         }
 
+    }
+
+    IEnumerator WaveSpawnerRoutine()
+    {
+        for (int i = 1; i < _numberOfWaves+1; i++)
+        {
+            _uiManager.NewWaveIncomingText(true);
+            yield return new WaitForSeconds(2);
+            _uiManager.NewWaveIncomingText(false);
+            for (int j = 0; j < i; j++)
+            {
+                Vector3 positionToSpawn = new Vector3(Random.Range(-9,9),8,0);
+                GameObject newEnemy = Instantiate(_enemyPrefab,positionToSpawn, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+            }
+            yield return new WaitForSeconds(_timeBetweenWaves);
+            
+
+        }
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -69,6 +93,8 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
+        StopAllCoroutines();
+
     }
 
 }
